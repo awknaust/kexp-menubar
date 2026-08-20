@@ -24,6 +24,9 @@ extension Notification {
 
 @Observable
 class AudioPlayer {
+    // Set on init so out-of-process triggers (App Intents) can reach the live instance.
+    private(set) static weak var shared: AudioPlayer?
+
     var isPlaying: Bool = false
     var isBuffering: Bool = false
     var hasInitializedStream: Bool = false
@@ -38,6 +41,7 @@ class AudioPlayer {
     private var maxSoftPauseBeforeReconnect: TimeInterval = 3600
 
     init() {
+        AudioPlayer.shared = self
         configurePlayer()
         observePlayer()
 
