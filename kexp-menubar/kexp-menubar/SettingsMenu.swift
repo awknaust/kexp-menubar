@@ -76,6 +76,13 @@ struct SettingsMenu: NSViewRepresentable {
             compactItem.isEnabled = true
             menu.addItem(compactItem)
 
+            // Start at Login
+            let launchItem = NSMenuItem(title: "Start at Login", action: #selector(toggleLaunchAtLogin(_:)), keyEquivalent: "")
+            launchItem.target = self
+            launchItem.state = LaunchAtLogin.isEnabled ? .on : .off
+            launchItem.isEnabled = true
+            menu.addItem(launchItem)
+
             menu.addItem(.separator())
 
             // Reconnect Stream
@@ -176,6 +183,11 @@ struct SettingsMenu: NSViewRepresentable {
 
         @objc private func toggleCompact(_ sender: NSMenuItem) {
             parent.isCompact = !parent.isCompact
+        }
+
+        @MainActor
+        @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
+            LaunchAtLogin.setEnabled(!LaunchAtLogin.isEnabled)
         }
 
         @objc private func reconnectStream(_ sender: NSMenuItem) {
